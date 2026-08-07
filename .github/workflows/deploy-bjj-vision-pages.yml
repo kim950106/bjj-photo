@@ -1,10 +1,9 @@
-name: Deploy GitHub Pages
+name: Deploy BJJ Vision Pages
 
 on:
   push:
     branches: [main]
     paths:
-      - 'index.html'
       - 'bjj-vision/static/**'
       - '.github/workflows/deploy-bjj-vision-pages.yml'
   workflow_dispatch:
@@ -33,8 +32,9 @@ jobs:
           enablement: true
       - name: Prepare site
         run: |
+          mkdir -p _site
+          rsync -av --exclude='.git' --exclude='.github' --exclude='_site' ./ _site/
           mkdir -p _site/bjj-vision
-          cp index.html _site/index.html
           cp -R bjj-vision/static/. _site/bjj-vision/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
