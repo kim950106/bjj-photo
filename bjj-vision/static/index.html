@@ -1,48 +1,159 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d0f12">
-<link rel="manifest" href="./manifest.webmanifest">
-<title>BJJ Vision</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#0b0d10" />
+<title>BJJ Vision Beta</title>
 <style>
-:root{--bg:#0d0f12;--panel:#15191f;--panel2:#1b2028;--line:#2b313b;--text:#f5f7fa;--muted:#a7b0bd;--ok:#a8ffbf}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:760px;margin:auto;padding:22px 16px 56px}.brand{display:flex;align-items:center;gap:12px;margin:4px 0 22px}.logo{width:46px;height:46px;border-radius:15px;background:#fff;color:#111;display:grid;place-items:center;font-weight:950}h1{font-size:24px;margin:0}.sub,.muted{color:var(--muted);font-size:13px}.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px;margin-top:14px}.drop{display:block;border:1px dashed #606b79;border-radius:18px;padding:30px 16px;text-align:center;background:var(--panel2);cursor:pointer}.drop strong{display:block;font-size:18px;margin-bottom:6px}.drop span{font-size:13px;color:var(--muted)}input[type=file]{display:none}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:15px}label{font-size:12px;color:var(--muted);display:block;margin-bottom:7px}select,input[type=number]{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:#0f1217;color:#fff;font-size:15px}.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.seg button{padding:12px;border-radius:12px;border:1px solid var(--line);background:#101318;color:var(--muted)}.seg button.active{background:#fff;color:#111;font-weight:800}.primary{width:100%;margin-top:16px;padding:15px;border:0;border-radius:14px;background:#fff;color:#111;font-size:16px;font-weight:900}.primary:disabled{opacity:.45}.status{margin-top:14px;padding:14px;border-radius:14px;background:#101318;border:1px solid var(--line);display:none}.result{display:none}.metric{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.metric>div{background:#101318;border:1px solid var(--line);border-radius:15px;padding:15px}.metric b{font-size:24px;display:block;margin-top:5px}.event{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.time{width:56px;color:var(--muted)}.pill{display:inline-block;margin-top:7px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;font-size:11px;color:var(--muted)}.ready{color:var(--ok)}.notice{font-size:12px;line-height:1.6;color:var(--muted);margin-top:12px}@media(max-width:600px){.grid{grid-template-columns:1fr}.wrap{padding-top:14px}}
+:root{--bg:#0b0d10;--panel:#141820;--panel2:#1a2029;--line:#2b333e;--text:#f7f8fa;--muted:#9ba6b5;--good:#8fe1a9;--warn:#ffd479}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Noto Sans KR",sans-serif}.wrap{max-width:820px;margin:auto;padding:22px 16px 64px}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;background:#fff;color:#111;border-radius:14px;display:grid;place-items:center;font-weight:950}.brand h1{font-size:23px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:4px}.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:16px}.drop{display:block;text-align:center;border:1px dashed #596575;border-radius:16px;background:var(--panel2);padding:24px 14px;cursor:pointer}.drop b{display:block;font-size:17px;margin-bottom:6px}.drop span{color:var(--muted);font-size:12px}input[type=file]{display:none}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}label.t{font-size:11px;color:var(--muted);display:block;margin-bottom:6px}select,input[type=number]{width:100%;background:#0f1319;color:#fff;border:1px solid var(--line);padding:12px;border-radius:11px}.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.seg button{border:1px solid var(--line);background:#0f1319;color:var(--muted);padding:12px;border-radius:11px}.seg button.active{background:#fff;color:#111;font-weight:850}.primary{width:100%;border:0;background:#fff;color:#111;font-weight:900;border-radius:13px;padding:14px;margin-top:16px;font-size:16px}.primary:disabled{opacity:.4}.status{margin-top:14px;color:var(--muted);font-size:13px;line-height:1.55}.progress{height:8px;background:#0d1116;border-radius:99px;overflow:hidden;margin-top:10px;border:1px solid var(--line)}.bar{height:100%;width:0;background:#fff;transition:width .15s}.videoWrap{display:none;margin-top:14px;border-radius:14px;overflow:hidden;background:#000}.videoWrap video{display:block;width:100%;max-height:360px;background:#000}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stat{background:#0f1319;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}.stat b{display:block;font-size:20px}.stat small{color:var(--muted)}.timeline{margin-top:12px}.ev{display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.time{color:var(--muted);font-variant-numeric:tabular-nums}.tag{font-weight:800}.conf{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 7px}.note{font-size:12px;color:var(--muted);margin-top:3px}.beta{display:inline-block;color:var(--warn);font-size:11px;border:1px solid #5c5134;border-radius:999px;padding:4px 8px;margin-left:6px}.good{color:var(--good)}.audio{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.audio ul{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:13px}.hidden{display:none}@media(max-width:600px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.wrap{padding-top:16px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="brand"><div class="logo">BJJ</div><div><h1>BJJ Vision</h1><div class="sub">스파링 영상을 데이터로 바꾸는 AI 코치 · V0</div></div></div>
-  <div class="card">
-    <label class="drop" for="video"><strong id="fileTitle">🎥 스파링 영상 선택</strong><span id="fileSub">휴대폰에서 촬영한 영상을 바로 선택하세요</span></label>
-    <input id="video" type="file" accept="video/*">
+  <div class="brand"><div class="logo">BJJ</div><div><h1>BJJ Vision <span class="beta">REAL BETA</span></h1><div class="sub">영상은 기기 안에서 분석됩니다 · MediaPipe 2인 포즈 추적</div></div></div>
+  <section class="card">
+    <label class="drop" for="videoFile"><b id="fileName">🎥 스파링 영상 선택</b><span id="fileInfo">휴대폰 촬영 영상을 바로 선택하세요</span></label>
+    <input id="videoFile" type="file" accept="video/*" />
+    <div id="videoWrap" class="videoWrap"><video id="video" playsinline controls preload="auto"></video></div>
     <div class="grid">
-      <div><label>내 띠</label><select id="myBelt"><option value="white">화이트</option><option value="blue" selected>블루</option><option value="purple">퍼플</option><option value="brown">브라운</option><option value="black">블랙</option></select></div>
-      <div><label>상대 띠</label><select id="oppBelt"><option value="white">화이트</option><option value="blue" selected>블루</option><option value="purple">퍼플</option><option value="brown">브라운</option><option value="black">블랙</option></select></div>
-      <div><label>스파링 시간(분)</label><input id="roundMinutes" type="number" min="1" max="30" step="0.5" value="5"></div>
-      <div><label>모드</label><select id="mode"><option value="training">체육관 Training</option><option value="ibjjf">IBJJF</option></select></div>
-      <div style="grid-column:1/-1"><label>영상 시작 시 나는</label><div class="seg"><button id="leftBtn" class="active" type="button">왼쪽 선수</button><button id="rightBtn" type="button">오른쪽 선수</button></div></div>
+      <div><label class="t">내 띠</label><select id="myBelt"><option value="white">화이트</option><option value="blue" selected>블루</option><option value="purple">퍼플</option><option value="brown">브라운</option><option value="black">블랙</option></select></div>
+      <div><label class="t">상대 띠</label><select id="oppBelt"><option value="white">화이트</option><option value="blue" selected>블루</option><option value="purple">퍼플</option><option value="brown">브라운</option><option value="black">블랙</option></select></div>
+      <div><label class="t">분석 시간(분)</label><input id="minutes" type="number" min="1" max="15" step="0.5" value="5"></div>
+      <div><label class="t">모드</label><select id="mode"><option value="training">체육관 Training</option><option value="ibjjf">IBJJF</option></select></div>
+      <div style="grid-column:1/-1"><label class="t">영상 시작 시 나는</label><div class="seg"><button id="leftBtn" class="active" type="button">왼쪽 선수</button><button id="rightBtn" type="button">오른쪽 선수</button></div></div>
     </div>
-    <button id="analyze" class="primary" disabled>영상 분석 준비</button>
-    <div id="status" class="status"></div>
-    <div class="notice">현재 공개 V0는 영상·경기정보를 브라우저에서 읽는 단계입니다. Guard / Mount / Back 자동 판정 모델은 다음 버전에 연결됩니다.</div>
-  </div>
-  <div id="result" class="card result">
-    <div><label>분석 세션</label><h2 id="videoName" style="margin:0;font-size:20px"></h2></div>
-    <div class="metric"><div>영상 길이<b id="duration">-</b></div><div>라운드 설정<b id="round">-</b></div><div>내 시작 위치<b id="side">-</b></div><div>분석 엔진<b class="ready">V0 READY</b></div></div>
-    <div style="margin-top:18px"><label>타임라인</label><div class="event"><div class="time">0:00</div><div><b>Round Start</b><div class="muted">선수 A/B 초기 식별 seed 생성</div><span class="pill" id="seed"></span></div></div></div>
-    <div class="status" style="display:block">다음 연결 단계: Player Tracking → Guard/Half/Side/Mount/Back → IBJJF 점수 → 영상+음성 Tap 판정</div>
-  </div>
-  <video id="probe" preload="metadata" style="display:none"></video>
+    <button id="analyzeBtn" class="primary" disabled>실제 영상 분석 시작</button>
+    <div id="status" class="status">영상을 선택하면 브라우저에서 AI 모델을 불러옵니다.</div>
+    <div class="progress"><div id="bar" class="bar"></div></div>
+  </section>
+
+  <section id="resultCard" class="card hidden">
+    <div><b>분석 결과</b><span class="beta">후보 판정 포함</span></div>
+    <div class="stats">
+      <div class="stat"><b id="frames">0</b><small>분석 프레임</small></div>
+      <div class="stat"><b id="twoRate">0%</b><small>2인 검출률</small></div>
+      <div class="stat"><b id="duration">0:00</b><small>분석 구간</small></div>
+    </div>
+    <div id="timeline" class="timeline"></div>
+    <div class="audio"><b>🔊 탭 소리 후보</b><div class="note">짧은 타격음이 연속으로 2회 이상 검출된 시점을 표시합니다. 체육관 소음 때문에 확정 탭으로 사용하지 않습니다.</div><ul id="audioList"></ul></div>
+  </section>
 </div>
-<script>
-const $=id=>document.getElementById(id);let side='left',file=null;const beltTimes={white:5,blue:6,purple:7,brown:8,black:10};
-$('leftBtn').onclick=()=>{side='left';$('leftBtn').classList.add('active');$('rightBtn').classList.remove('active')};
-$('rightBtn').onclick=()=>{side='right';$('rightBtn').classList.add('active');$('leftBtn').classList.remove('active')};
-$('mode').onchange=()=>{if($('mode').value==='ibjjf')$('roundMinutes').value=beltTimes[$('myBelt').value]};
-$('myBelt').onchange=()=>{if($('mode').value==='ibjjf')$('roundMinutes').value=beltTimes[$('myBelt').value]};
-$('video').onchange=e=>{file=e.target.files[0];if(!file)return;$('fileTitle').textContent=file.name;$('fileSub').textContent=(file.size/1024/1024).toFixed(1)+' MB';$('analyze').disabled=false};
-$('analyze').onclick=()=>{if(!file)return;const url=URL.createObjectURL(file);const v=$('probe');$('status').style.display='block';$('status').textContent='휴대폰에서 영상 메타데이터를 읽는 중...';v.src=url;v.onloadedmetadata=()=>{const sec=v.duration||0;const m=Math.floor(sec/60),s=Math.floor(sec%60).toString().padStart(2,'0');$('duration').textContent=`${m}:${s}`;$('round').textContent=$('roundMinutes').value+'분';$('side').textContent=side==='left'?'왼쪽':'오른쪽';$('videoName').textContent=file.name;$('seed').textContent=`나=${side==='left'?'Player A':'Player B'} · ${$('myBelt').value} belt`;$('result').style.display='block';$('status').textContent='영상 세션 생성 완료. V0 브라우저 분석 파이프라인이 정상 동작합니다.';URL.revokeObjectURL(url);$('result').scrollIntoView({behavior:'smooth'})};v.onerror=()=>{$('status').textContent='이 영상 형식은 현재 브라우저에서 읽을 수 없습니다.'}};
+
+<script type="module">
+import { FilesetResolver, PoseLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/+esm";
+
+const $=id=>document.getElementById(id);
+const beltTimes={white:5,blue:6,purple:7,brown:8,black:10};
+let mySide="left", poseLandmarker=null, modelLoading=null, objectUrl=null;
+let prevA=null, prevB=null;
+
+function fmt(sec){sec=Math.max(0,Math.floor(sec));return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}`}
+function avg(vals){return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0}
+function pt(lms,i){return lms?.[i]||{x:0,y:0,z:0,visibility:0}}
+function mid(a,b){return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,z:(a.z+b.z)/2,visibility:avg([a.visibility||0,b.visibility||0])}}
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function centroid(lms){const ids=[11,12,23,24,25,26];const ps=ids.map(i=>pt(lms,i)).filter(p=>(p.visibility??1)>.25);return {x:avg(ps.map(p=>p.x)),y:avg(ps.map(p=>p.y))}}
+function poseQuality(lms){return avg([11,12,23,24,25,26,27,28].map(i=>pt(lms,i).visibility||0))}
+function torso(lms){const s=mid(pt(lms,11),pt(lms,12)), h=mid(pt(lms,23),pt(lms,24));const dx=h.x-s.x,dy=h.y-s.y;return {s,h,dx,dy,len:Math.hypot(dx,dy),vertical:Math.abs(dy)/(Math.abs(dx)+Math.abs(dy)+1e-6),angle:Math.atan2(dy,dx)}}
+function angleDiff(a,b){let d=Math.abs(a-b);while(d>Math.PI)d=Math.abs(d-2*Math.PI);return d}
+function poseState(lms){
+  const t=torso(lms), h=t.h;
+  const knees=mid(pt(lms,25),pt(lms,26)), ankles=mid(pt(lms,27),pt(lms,28));
+  const q=poseQuality(lms);
+  const standing=t.vertical>.66 && t.len>.085 && h.y<.82 && Math.abs(ankles.y-h.y)>.12;
+  const grounded=!standing && (t.vertical<.60 || h.y>.55 || Math.abs(knees.y-h.y)<.12);
+  return {standing,grounded,q,t,center:centroid(lms),knees,ankles};
+}
+function classifyPair(A,B){
+  if(!A||!B)return {label:"1인/가림",confidence:.35,note:"두 선수를 동시에 찾지 못함"};
+  const a=poseState(A), b=poseState(B); const q=Math.min(a.q,b.q);
+  if(a.standing&&b.standing)return {label:"Standing",confidence:Math.min(.96,.65+q*.3),note:"두 선수 모두 기립 자세"};
+  const cd=dist(a.center,b.center);
+  if((a.standing&&!b.standing)||(b.standing&&!a.standing))return {label:"Standing ↔ Ground",confidence:Math.min(.88,.58+q*.25),note:"한 선수는 기립, 한 선수는 지면 상태"};
+  if(a.grounded&&b.grounded){
+    const diff=angleDiff(a.t.angle,b.t.angle)*180/Math.PI;
+    const Ahip=a.t.h, Bhip=b.t.h;
+    const Ak1=pt(A,25),Ak2=pt(A,26),Bk1=pt(B,25),Bk2=pt(B,26);
+    const Astraddle=(Math.min(Ak1.x,Ak2.x)<Bhip.x&&Math.max(Ak1.x,Ak2.x)>Bhip.x)&&dist(Ahip,b.t.s)<.22;
+    const Bstraddle=(Math.min(Bk1.x,Bk2.x)<Ahip.x&&Math.max(Bk1.x,Bk2.x)>Ahip.x)&&dist(Bhip,a.t.s)<.22;
+    if((Astraddle||Bstraddle)&&cd<.25)return {label:"Mount 후보",confidence:Math.min(.82,.48+q*.32),note:"상단 선수의 무릎/힙이 상대 몸통을 양쪽에서 감싸는 형태"};
+    const sameDir=diff<32; const hipClose=dist(Ahip,Bhip)<.20;
+    if(sameDir&&hipClose&&cd<.22)return {label:"Back 후보",confidence:Math.min(.74,.42+q*.28),note:"몸통 방향과 힙 위치가 겹침. 훅 확인은 아직 불가"};
+    if(diff>48&&cd<.28)return {label:"Side Control 후보",confidence:Math.min(.80,.48+q*.30),note:"두 몸통 축이 교차하고 밀착된 형태"};
+    const AlegsNearB=Math.min(dist(pt(A,25),Bhip),dist(pt(A,26),Bhip),dist(pt(A,27),Bhip),dist(pt(A,28),Bhip));
+    const BlegsNearA=Math.min(dist(pt(B,25),Ahip),dist(pt(B,26),Ahip),dist(pt(B,27),Ahip),dist(pt(B,28),Ahip));
+    if(Math.min(AlegsNearB,BlegsNearA)<.18&&cd<.32)return {label:"Guard / Half 후보",confidence:Math.min(.78,.46+q*.28),note:"하체가 상대 힙/다리 주변을 제어하는 형태"};
+    return {label:"Ground / Scramble",confidence:Math.min(.86,.55+q*.25),note:"양 선수 지면 상태, 세부 포지션 불명확"};
+  }
+  return {label:"Transition",confidence:Math.min(.72,.42+q*.22),note:"자세 전환 구간"};
+}
+function assignPlayers(poses){
+  if(poses.length<2){return {A:poses[0]||null,B:null}}
+  const [p0,p1]=poses.slice(0,2), c0=centroid(p0),c1=centroid(p1);
+  if(!prevA||!prevB){
+    const leftIs0=c0.x<=c1.x; const left=leftIs0?p0:p1, right=leftIs0?p1:p0;
+    const A=mySide==="left"?left:right, B=mySide==="left"?right:left;
+    prevA=centroid(A);prevB=centroid(B);return {A,B};
+  }
+  const costSame=dist(c0,prevA)+dist(c1,prevB), costSwap=dist(c1,prevA)+dist(c0,prevB);
+  const A=costSame<=costSwap?p0:p1, B=costSame<=costSwap?p1:p0;
+  prevA=centroid(A);prevB=centroid(B); return {A,B};
+}
+async function ensureModel(){
+  if(poseLandmarker)return poseLandmarker;
+  if(modelLoading)return modelLoading;
+  modelLoading=(async()=>{
+    $("status").textContent="AI 포즈 모델 로딩 중…";
+    const vision=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm");
+    const opts={baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",delegate:"GPU"},runningMode:"VIDEO",numPoses:2,minPoseDetectionConfidence:.35,minPosePresenceConfidence:.35,minTrackingConfidence:.35};
+    try{poseLandmarker=await PoseLandmarker.createFromOptions(vision,opts)}catch(e){delete opts.baseOptions.delegate;poseLandmarker=await PoseLandmarker.createFromOptions(vision,opts)}
+    return poseLandmarker;
+  })();
+  return modelLoading;
+}
+function seek(video,time){return new Promise((resolve,reject)=>{const done=()=>{cleanup();resolve()};const fail=()=>{cleanup();reject(new Error("영상 탐색 실패"))};const cleanup=()=>{video.removeEventListener("seeked",done);video.removeEventListener("error",fail)};video.addEventListener("seeked",done,{once:true});video.addEventListener("error",fail,{once:true});video.currentTime=Math.min(time,Math.max(0,video.duration-.02));setTimeout(()=>{cleanup();resolve()},1200)})}
+function mergeSegments(rows,step){
+  if(!rows.length)return[];const out=[];let cur={...rows[0],end:rows[0].t+step,count:1,confSum:rows[0].confidence};
+  for(let i=1;i<rows.length;i++){const r=rows[i];if(r.label===cur.label&&r.t-cur.end<=step*1.3){cur.end=r.t+step;cur.count++;cur.confSum+=r.confidence;cur.note=r.note}else{cur.confidence=cur.confSum/cur.count;out.push(cur);cur={...r,end:r.t+step,count:1,confSum:r.confidence}}}cur.confidence=cur.confSum/cur.count;out.push(cur);return out;
+}
+async function detectAudioTapCandidates(file,maxSec){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();const buf=await file.arrayBuffer();const audio=await ctx.decodeAudioData(buf.slice(0));const data=audio.getChannelData(0);const sr=audio.sampleRate;const win=Math.max(1,Math.floor(sr*.04));const hop=win;const vals=[];const limit=Math.min(data.length,Math.floor(maxSec*sr));
+    for(let i=0;i<limit;i+=hop){let s=0;for(let j=i;j<Math.min(i+win,limit);j++)s+=data[j]*data[j];vals.push(Math.sqrt(s/win))}
+    const sorted=[...vals].sort((a,b)=>a-b);const med=sorted[Math.floor(sorted.length*.5)]||.001;const threshold=Math.max(.06,med*4.5);const peaks=[];for(let i=1;i<vals.length-1;i++)if(vals[i]>threshold&&vals[i]>=vals[i-1]&&vals[i]>vals[i+1])peaks.push(i*hop/sr);
+    const clusters=[];for(let i=0;i<peaks.length-1;i++){if(peaks[i+1]-peaks[i]>=.08&&peaks[i+1]-peaks[i]<=.8){const t=peaks[i];if(!clusters.length||t-clusters[clusters.length-1]>1.2)clusters.push(t)}}ctx.close();return clusters.slice(0,20);
+  }catch(e){return[]}
+}
+async function runAnalysis(){
+  const file=$("videoFile").files[0], video=$("video");if(!file)return;
+  $("analyzeBtn").disabled=true;$("bar").style.width="1%";$("resultCard").classList.add("hidden");prevA=prevB=null;
+  try{
+    await ensureModel();
+    const requested=Number($("minutes").value)*60;const maxSec=Math.min(video.duration||requested,requested);const targetFrames=300;const step=Math.max(1, maxSec/targetFrames);const rows=[];let two=0,total=0;
+    $("status").textContent=`실제 프레임 분석 중 · ${fmt(maxSec)} 구간`;
+    for(let t=0;t<maxSec;t+=step){
+      await seek(video,t);const result=poseLandmarker.detectForVideo(video,Math.round(t*1000));const poses=result.landmarks||[];total++;if(poses.length>=2)two++;
+      const {A,B}=assignPlayers(poses);const cls=classifyPair(A,B);rows.push({t,label:cls.label,confidence:cls.confidence,note:cls.note});
+      $("bar").style.width=`${Math.min(96,(t/maxSec)*96)}%`;if(total%10===0)await new Promise(r=>setTimeout(r,0));
+    }
+    $("status").textContent="탭 소리 후보 분석 중…";const audio=await detectAudioTapCandidates(file,maxSec);
+    const segs=mergeSegments(rows,step);$("frames").textContent=total;$("twoRate").textContent=`${Math.round(two/Math.max(1,total)*100)}%`;$("duration").textContent=fmt(maxSec);
+    $("timeline").innerHTML=segs.map(s=>`<div class="ev"><div class="time">${fmt(s.t)}–${fmt(Math.min(maxSec,s.end))}</div><div><div class="tag">${s.label}</div><div class="note">${s.note}</div></div><div class="conf">${Math.round(s.confidence*100)}%</div></div>`).join("");
+    $("audioList").innerHTML=audio.length?audio.map(t=>`<li>${fmt(t)} 전후 · 연속 타격음 후보</li>`).join(""):"<li>뚜렷한 연속 타격음 후보 없음</li>";
+    $("resultCard").classList.remove("hidden");$("bar").style.width="100%";$("status").innerHTML=`<span class="good">분석 완료.</span> Guard/Side/Mount/Back은 현재 자세 기반 후보 판정이며, 점수 확정에는 사용하지 않습니다.`;
+  }catch(e){console.error(e);$("status").textContent=`분석 오류: ${e.message||e}`;$("bar").style.width="0%"}finally{$("analyzeBtn").disabled=false}
+}
+
+$("leftBtn").onclick=()=>{mySide="left";$("leftBtn").classList.add("active");$("rightBtn").classList.remove("active")};
+$("rightBtn").onclick=()=>{mySide="right";$("rightBtn").classList.add("active");$("leftBtn").classList.remove("active")};
+$("mode").onchange=e=>{if(e.target.value==="ibjjf")$("minutes").value=beltTimes[$("myBelt").value]};
+$("myBelt").onchange=e=>{if($("mode").value==="ibjjf")$("minutes").value=beltTimes[e.target.value]};
+$("videoFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(f);const v=$("video");v.src=objectUrl;$("videoWrap").style.display="block";$("fileName").textContent=f.name;$("fileInfo").textContent=`${(f.size/1024/1024).toFixed(1)} MB · 영상 메타데이터 확인 중`;
+  await new Promise(res=>{if(v.readyState>=1)res();else v.onloadedmetadata=()=>res()});$("fileInfo").textContent=`${(f.size/1024/1024).toFixed(1)} MB · ${fmt(v.duration)}`;$("analyzeBtn").disabled=false;$("status").textContent="준비됨. 처음 분석 시 AI 모델을 한 번 불러옵니다.";
+};
+$("analyzeBtn").onclick=runAnalysis;
 </script>
 </body>
 </html>
