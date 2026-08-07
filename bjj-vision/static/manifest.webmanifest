@@ -1,0 +1,9 @@
+{
+  "name": "BJJ Vision",
+  "short_name": "BJJ Vision",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0f12",
+  "theme_color": "#0d0f12",
+  "icons": []
+}

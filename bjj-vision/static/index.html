@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0f12" />
+  <link rel="manifest" href="/static/manifest.webmanifest" />
+  <title>BJJ Vision V0</title>
+  <style>
+    :root{--bg:#0d0f12;--panel:#15191f;--panel2:#1b2028;--line:#2b313b;--text:#f5f7fa;--muted:#a7b0bd}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:860px;margin:0 auto;padding:28px 18px 60px}.brand{display:flex;align-items:center;gap:12px;margin-bottom:26px}.logo{width:42px;height:42px;border-radius:14px;background:#fff;color:#111;display:grid;place-items:center;font-weight:900}h1{font-size:24px;margin:0}.sub{color:var(--muted);margin-top:4px;font-size:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px;margin-top:16px}.drop{border:1px dashed #596270;border-radius:18px;padding:28px 16px;text-align:center;background:var(--panel2);cursor:pointer}.drop strong{display:block;font-size:18px;margin-bottom:6px}.drop span{font-size:13px;color:var(--muted)}input[type=file]{display:none}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}label{font-size:12px;color:var(--muted);display:block;margin-bottom:7px}select,input[type=number]{width:100%;padding:13px 12px;border-radius:12px;border:1px solid var(--line);background:#0f1217;color:white;font-size:15px}.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.seg button{padding:12px;border-radius:12px;border:1px solid var(--line);background:#101318;color:var(--muted);cursor:pointer}.seg button.active{background:#fff;color:#111;border-color:#fff;font-weight:800}.primary{width:100%;margin-top:18px;padding:15px;border:0;border-radius:14px;background:#fff;color:#111;font-size:16px;font-weight:900;cursor:pointer}.primary:disabled{opacity:.45;cursor:not-allowed}.status{display:none;margin-top:16px;padding:14px;border-radius:14px;background:#101318;border:1px solid var(--line);color:var(--muted)}.result{display:none}.score{display:flex;justify-content:space-between;gap:12px;margin-top:14px}.score>div{flex:1;background:#101318;border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}.score b{font-size:34px;display:block;margin-top:6px}.timeline{margin-top:16px}.event{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}.time{width:58px;color:var(--muted);font-variant-numeric:tabular-nums}.event b{display:block}.event small{color:var(--muted)}.pill{display:inline-block;font-size:11px;border:1px solid var(--line);padding:4px 8px;border-radius:999px;margin-top:8px;color:var(--muted)}@media(max-width:620px){.grid{grid-template-columns:1fr}.wrap{padding-top:18px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><div class="logo">BJJ</div><div><h1>BJJ Vision</h1><div class="sub">스파링 영상을 데이터로 바꾸는 AI 분석기 · V0</div></div></div>
+  <div class="card">
+    <label class="drop" for="video"><strong id="fileTitle">🎥 스파링 영상 업로드</strong><span id="fileSub">MP4 / MOV / WEBM · V0 최대 500MB</span></label>
+    <input id="video" type="file" accept="video/*">
+    <div class="grid">
+      <div><label>내 띠</label><select id="myBelt"><option value="white">화이트</option><option value="blue" selected>블루</option><option value="purple">퍼플</option><option value="brown">브라운</option><option value="black">블랙</option></select></div>
+      <div><label>상대 띠</label><select id="oppBelt"><option value="white">화이트</option><option value="blue" selected>블루</option><option value="purple">퍼플</option><option value="brown">브라운</option><option value="black">블랙</option></select></div>
+      <div><label>스파링 시간(분)</label><input id="roundMinutes" type="number" min="1" max="30" step="0.5" value="5"></div>
+      <div><label>모드</label><select id="mode"><option value="training">체육관 Training</option><option value="ibjjf">IBJJF</option></select></div>
+      <div style="grid-column:1/-1"><label>영상 시작 시 나는</label><div class="seg"><button id="leftBtn" class="active" type="button">왼쪽 선수</button><button id="rightBtn" type="button">오른쪽 선수</button></div></div>
+    </div>
+    <button id="analyze" class="primary" disabled>분석 준비하기</button><div id="status" class="status"></div>
+  </div>
+  <div id="result" class="card result">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:end"><div><label>분석 결과</label><h2 id="videoName" style="margin:0;font-size:20px"></h2></div><span class="pill" id="stage"></span></div>
+    <div class="score"><div>PLAYER A<b id="scoreA">0</b></div><div>PLAYER B<b id="scoreB">0</b></div></div>
+    <div style="margin-top:16px;color:var(--muted)" id="meta"></div><div class="timeline" id="timeline"></div>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);let side="left";
+$("leftBtn").onclick=()=>{side="left";$("leftBtn").classList.add("active");$("rightBtn").classList.remove("active")};
+$("rightBtn").onclick=()=>{side="right";$("rightBtn").classList.add("active");$("leftBtn").classList.remove("active")};
+$("video").onchange=e=>{const f=e.target.files[0];if(!f)return;$("fileTitle").textContent=f.name;$("fileSub").textContent=(f.size/1024/1024).toFixed(1)+" MB";$("analyze").disabled=false};
+const beltTimes={white:5,blue:6,purple:7,brown:8,black:10};
+$("mode").onchange=e=>{if(e.target.value==="ibjjf")$("roundMinutes").value=beltTimes[$("myBelt").value]};
+$("myBelt").onchange=e=>{if($("mode").value==="ibjjf")$("roundMinutes").value=beltTimes[e.target.value]};
+$("analyze").onclick=async()=>{const f=$("video").files[0];if(!f)return;$("status").style.display="block";$("status").textContent="영상 정보를 읽고 분석 파이프라인을 준비하는 중...";$("analyze").disabled=true;const fd=new FormData();fd.append("video",f);fd.append("my_belt",$("myBelt").value);fd.append("opponent_belt",$("oppBelt").value);fd.append("mode",$("mode").value);fd.append("round_minutes",$("roundMinutes").value);fd.append("my_start_side",side);try{const r=await fetch("/api/analyze",{method:"POST",body:fd});const data=await r.json();if(!r.ok)throw new Error(data.detail||"분석 실패");$("status").textContent=data.message;$("result").style.display="block";$("videoName").textContent=data.filename;$("stage").textContent=data.engine_stage;$("scoreA").textContent=data.score_a;$("scoreB").textContent=data.score_b;$("meta").textContent=`영상 ${data.duration_sec.toFixed(1)}초 · 샘플 프레임 ${data.sampled_frames}개 · ${data.config.round_minutes}분 룰 · 내 시작 위치 ${data.config.my_start_side}`;$("timeline").innerHTML="";data.timeline.forEach(ev=>{const d=document.createElement("div");d.className="event";const m=Math.floor(ev.timestamp_sec/60),s=Math.floor(ev.timestamp_sec%60).toString().padStart(2,"0");d.innerHTML=`<div class="time">${m}:${s}</div><div><b>${ev.event_type}</b><small>${ev.position||""} · 신뢰도 ${Math.round(ev.confidence*100)}%</small><div class="pill">${ev.note||""}</div></div>`;$("timeline").appendChild(d)})}catch(err){$("status").textContent="오류: "+err.message}finally{$("analyze").disabled=false}};
+</script>
+</body>
+</html>
