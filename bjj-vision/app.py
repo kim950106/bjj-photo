@@ -1,14 +1,16 @@
 from pathlib import Path
 import tempfile
+
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from bjj.models import AnalysisConfig
 from bjj.analyzer import BJJAnalyzerV0
-from bjj.rules import BELT_MATCH_MINUTES, DEFAULT_GYM_ROLL_MINUTES, POINTS
+from bjj.nvidia_analyzer import analyze_video_with_nvidia
+from bjj.rules import BELT_MATCH_MINUTES, DEFAULT_GYM_ROLL_MINUTES, POINTS, event_points
 
-app = FastAPI(title="BJJ Vision V0", version="0.1.0")
+app = FastAPI(title="BJJ Vision", version="0.2.0")
 analyzer = BJJAnalyzerV0()
 
 STATIC = Path(__file__).parent / "static"
@@ -17,6 +19,10 @@ app.mount("/static", StaticFiles(directory=STATIC), name="static")
 @app.get("/")
 def root():
     return FileResponse(STATIC / "index.html")
+
+@app.get("/api/health")
+def health():
+    return {"ok": True, "engine": "nvidia-cosmos-ready"}
 
 @app.get("/api/rules")
 def rules():
@@ -41,6 +47,51 @@ def rules():
         ],
     }
 
+
+def _validate_video(video: UploadFile) -> str:
+    if not video.filename:
+        raise HTTPException(400, "파일명이 없습니다.")
+    suffix = Path(video.filename).suffix.lower()
+    if suffix not in {".mp4", ".mov", ".m4v", ".avi", ".webm"}:
+        raise HTTPException(400, "지원 영상 형식: mp4, mov, m4v, avi, webm")
+    return suffix
+
+
+@app.post("/api/analyze-nvidia")
+async def analyze_nvidia(video: UploadFile = File(...)):
+    suffix = _validate_video(video)
+    data = await video.read()
+    if len(data) > 500 * 1024 * 1024:
+        raise HTTPException(413, "500MB 이하 영상을 사용해주세요.")
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+        tmp.write(data)
+        tmp_path = Path(tmp.name)
+
+    try:
+        result = await analyze_video_with_nvidia(tmp_path)
+        score = {"A": 0, "B": 0}
+        scoring_events = []
+        for event in result.get("events", []):
+            actor = event.get("actor")
+            event_type = event.get("type", "")
+            stable = float(event.get("stable_seconds", 0) or 0)
+            pts = event_points(event_type, stable)
+            if actor in score and pts:
+                score[actor] += pts
+                scoring_events.append({**event, "points": pts})
+        result["score"] = score
+        result["scoring_events"] = scoring_events
+        result["warning"] = "AI 판정은 베타입니다. 낮은 신뢰도 이벤트는 사용자 확인이 필요합니다."
+        return result
+    except RuntimeError as e:
+        raise HTTPException(503, str(e))
+    except Exception as e:
+        raise HTTPException(400, f"NVIDIA 영상 분석 실패: {e}")
+    finally:
+        tmp_path.unlink(missing_ok=True)
+
+
 @app.post("/api/analyze")
 async def analyze(
     video: UploadFile = File(...),
@@ -50,13 +101,7 @@ async def analyze(
     round_minutes: float = Form(5),
     my_start_side: str = Form("left"),
 ):
-    if not video.filename:
-        raise HTTPException(400, "파일명이 없습니다.")
-
-    suffix = Path(video.filename).suffix.lower()
-    if suffix not in {".mp4", ".mov", ".m4v", ".avi", ".webm"}:
-        raise HTTPException(400, "지원 영상 형식: mp4, mov, m4v, avi, webm")
-
+    suffix = _validate_video(video)
     try:
         config = AnalysisConfig(
             my_belt=my_belt,
@@ -68,10 +113,9 @@ async def analyze(
     except Exception as e:
         raise HTTPException(400, f"설정 오류: {e}")
 
-    max_bytes = 500 * 1024 * 1024
     data = await video.read()
-    if len(data) > max_bytes:
-        raise HTTPException(413, "V0에서는 500MB 이하 영상을 사용해주세요.")
+    if len(data) > 500 * 1024 * 1024:
+        raise HTTPException(413, "500MB 이하 영상을 사용해주세요.")
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
         tmp.write(data)
